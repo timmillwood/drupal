@@ -9,6 +9,8 @@ namespace Drupal\statistics;
 
 /**
  * Provides an interface defining Statistics Storage
+ * Stores the views per day, total views and timestamp of last view
+ * for all nodes on the site.
  */
 interface StatisticsStorageInterface {
 
