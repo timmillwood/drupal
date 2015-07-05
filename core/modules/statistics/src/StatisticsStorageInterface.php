@@ -22,7 +22,7 @@ interface StatisticsStorageInterface {
    *   TRUE if the node view has been counted
    */
   public function recordHit($nid);
-  
+
   /**
    * Returns the number of times a node has been viewed
    *
