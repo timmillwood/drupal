@@ -47,7 +47,7 @@ use Drupal\user\Entity\User;
  * @return
  *   An associative array of replacement values, keyed by the raw [type:token]
  *   strings from the original text. Replacement values can either be a raw
- *   string, or if cacheability information must be provided, an instance of
+ *   string, or if cacheability metadata must be provided, an instance of
  *   \Drupal\Core\Utility\Token\TokenReplacementResult.
  *
  * @see hook_token_info()
@@ -82,7 +82,7 @@ function hook_tokens($type, $tokens, array $data = array(), array $options = arr
 
         case 'title':
           $result = new TokenReplacementResult($sanitize ? SafeMarkup::checkPlain($node->getTitle()) : $node->getTitle());
-          $result->merge(CacheableMetadata::createFromObject($node));
+          $result = $result->merge(CacheableMetadata::createFromObject($node));
           $replacements[$original] = $result;
           break;
 
@@ -94,8 +94,8 @@ function hook_tokens($type, $tokens, array $data = array(), array $options = arr
         case 'author':
           $account = $node->getOwner() ? $node->getOwner() : User::load(0);
           $result = new TokenReplacementResult($sanitize ? SafeMarkup::checkPlain($account->label()) : $account->label());
-          $result->merge(CacheableMetadata::createFromObject($node));
-          $result->merge(CacheableMetadata::createFromObject($account));
+          $result = $result->merge(CacheableMetadata::createFromObject($node));
+          $result = $result->merge(CacheableMetadata::createFromObject($account));
           $replacements[$original] = $result;
           break;
 

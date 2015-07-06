@@ -14,18 +14,19 @@ use Drupal\Core\Cache\CacheableMetadata;
  *
  * Most token replacements will take a token of the form [base:token] and
  * replace this with a string calculated at run-time. However some of these may
- * need to pass cacheability information to the caller. E.g. using the
- * [user:name] token in a node-body needs to add cacheability information for
- * the user to the node's cacheability data.
+ * need to pass cacheability metadata to the caller. E.g. using the
+ * [user:name] token in a node-body needs to add cacheability metadata for
+ * the user to the node's cacheability metadata.
  *
  * This value object is used when a a token replacement needs one of the
  * following:
  * - To declare cache tags that the replacement text depends upon, so when
- *   any of those cache tags is invalidated, the replacement text should also be
+ *   any of those cache tags are invalidated, the replacement text should also be
  *   invalidated.
- * - Declare cache context to vary by, e.g. 'language' to do language-specific
- *   tokening.
- * - Declare a maximum age for the replacement text.
+ * - Declare cache context to vary by, e.g. 'language:language_interface' to do
+ *   interface language-specific tokening.
+ * - Declare a maximum age for the replacement text, e.g. 300, if the text will
+ *   become outdated after 5 minutes.
  *
  * In case a token needs one or more of these advanced use cases, it can use
  * the additional methods available.
@@ -91,7 +92,7 @@ class TokenReplacementResult extends CacheableMetadata {
   }
 
   /**
-   * Gets the processed text.
+   * Gets the replacement text.
    *
    * @return string
    *   The string representation of this token.
