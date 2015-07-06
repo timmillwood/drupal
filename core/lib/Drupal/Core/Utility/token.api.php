@@ -6,6 +6,8 @@
  */
 
 use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Token\Utility\TokenReplacementResult;
 use Drupal\user\Entity\User;
 
 /**
@@ -44,10 +46,13 @@ use Drupal\user\Entity\User;
  *
  * @return
  *   An associative array of replacement values, keyed by the raw [type:token]
- *   strings from the original text.
+ *   strings from the original text. Replacement values can either be a raw
+ *   string, or if cacheability information must be provided, an instance of
+ *   \Drupal\Core\Utility\Token\TokenReplacementResult.
  *
  * @see hook_token_info()
  * @see hook_tokens_alter()
+ * @see \Drupal\Core\Utility\Token\TokenReplacementResult
  */
 function hook_tokens($type, $tokens, array $data = array(), array $options = array()) {
   $token_service = \Drupal::token();
@@ -76,7 +81,9 @@ function hook_tokens($type, $tokens, array $data = array(), array $options = arr
           break;
 
         case 'title':
-          $replacements[$original] = $sanitize ? SafeMarkup::checkPlain($node->getTitle()) : $node->getTitle();
+          $result = new TokenReplacementResult($sanitize ? SafeMarkup::checkPlain($node->getTitle()) : $node->getTitle());
+          $result->merge(CacheableMetadata::createFromObject($node));
+          $replacements[$original] = $result;
           break;
 
         case 'edit-url':
@@ -86,7 +93,10 @@ function hook_tokens($type, $tokens, array $data = array(), array $options = arr
         // Default values for the chained tokens handled below.
         case 'author':
           $account = $node->getOwner() ? $node->getOwner() : User::load(0);
-          $replacements[$original] = $sanitize ? SafeMarkup::checkPlain($account->label()) : $account->label();
+          $result = new TokenReplacementResult($sanitize ? SafeMarkup::checkPlain($account->label()) : $account->label());
+          $result->merge(CacheableMetadata::createFromObject($node));
+          $result->merge(CacheableMetadata::createFromObject($account));
+          $replacements[$original] = $result;
           break;
 
         case 'created':
