@@ -695,7 +695,7 @@ services:
     arguments: ['@request_stack', '@config.factory', '@path_processor_manager']
   link_generator:
     class: Drupal\Core\Utility\LinkGenerator
-    arguments: ['@url_generator', '@module_handler']
+    arguments: ['@url_generator', '@module_handler', '@renderer']
   router:
     class: Drupal\Core\Routing\AccessAwareRouter
     arguments: ['@router.no_access_checks', '@access_manager', '@current_user']
@@ -1031,7 +1031,7 @@ services:
     class: Drupal\Core\EventSubscriber\DefaultExceptionSubscriber
     tags:
       - { name: event_subscriber }
-    arguments: ['@config.factory', '@bare_html_page_renderer']
+    arguments: ['@config.factory']
   exception.logger:
     class: Drupal\Core\EventSubscriber\ExceptionLoggingSubscriber
     tags:
@@ -1392,6 +1392,11 @@ services:
   renderer:
     class: Drupal\Core\Render\Renderer
     arguments: ['@controller_resolver', '@theme.manager', '@plugin.manager.element_info', '@render_cache', '%renderer.config%']
+  early_rendering_controller_wrapper_subscriber:
+    class: Drupal\Core\EventSubscriber\EarlyRenderingControllerWrapperSubscriber
+    arguments: ['@controller_resolver', '@renderer']
+    tags:
+      - { name: event_subscriber }
   email.validator:
     class: Egulias\EmailValidator\EmailValidator
 
