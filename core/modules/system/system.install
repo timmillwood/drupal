@@ -85,16 +85,16 @@ function system_requirements($phase) {
     // If PHP is old, it's not safe to continue with the requirements check.
     return $requirements;
   }
-
-  // Suggest to update to at least 5.5.21 or 5.6.5 for disabling multiple
-  // statements.
-  if (($phase === 'install' || \Drupal::database()->driver() === 'mysql') && !SystemRequirements::phpVersionWithPdoDisallowMultipleStatements($phpversion)) {
-    $requirements['php'] = array(
-      'title' => t('PHP (multiple statement disabling)'),
-      'value' => $phpversion_label,
-      'description' => t('PHP versions higher than 5.6.5 or 5.5.21 provide built-in SQL injection protection for mysql databases. It is recommended to update.'),
-      'severity' => REQUIREMENT_INFO,
-    );
+  elseif (($phase === 'install' || \Drupal::database()->driver() === 'mysql') && !SystemRequirements::phpVersionWithPdoDisallowMultipleStatements($phpversion)) {
+    // Suggest to update to at least 5.5.21 or 5.6.5 for disabling multiple
+    // statements.
+    $requirements['php']['title'] = t('PHP (multiple statement disabling)');
+    $requirements['php']['description'] = t('PHP versions higher than 5.6.5 or 5.5.21 provide built-in SQL injection protection for mysql databases. It is recommended to update.');
+    $requirements['php']['severity'] = REQUIREMENT_INFO;
+  }
+  elseif (version_compare($phpversion, DRUPAL_SUGGESTED_PHP) < 0) {
+    $requirements['php']['description'] = t('Your current PHP installation is still supported, but Drupal suggests using PHP %version. Find more information about the <a href="@version_support">PHP requirements for Drupal</a>.', array('%version' => DRUPAL_SUGGESTED_PHP, '@version_support' => 'https://www.drupal.org/requirements/php'));
+    $requirements['php']['severity'] = REQUIREMENT_INFO;
   }
 
   // Test for PHP extensions.

@@ -26,6 +26,11 @@ use Drupal\Core\Language\LanguageInterface;
 const DRUPAL_MINIMUM_PHP = '5.4.5';
 
 /**
+ * Suggested version of PHP.
+ */
+const DRUPAL_SUGGESTED_PHP = '5.6.5';
+
+/**
  * Minimum recommended value of PHP memory_limit.
  *
  * 64M was chosen as a minimum requirement in order to allow for additional
