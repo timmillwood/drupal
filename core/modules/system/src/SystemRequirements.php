@@ -31,10 +31,6 @@ class SystemRequirements {
   const PHP_MIN_HIGH = '5.6.5';
 
   /**
-   * Current version is a more readable version.
-   */
-  public static $phpVer = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION;
-  /**
    * Determines whether the passed in PHP version disallows multiple statements.
    *
    * @param string $phpversion
@@ -44,6 +40,15 @@ class SystemRequirements {
   public static function phpVersionWithPdoDisallowMultipleStatements($phpversion) {
     return (version_compare($phpversion, self::PHP_MIN_LOW, '>=') && version_compare($phpversion, self::PHP_MAX_LOW, '<'))
       || version_compare($phpversion, self::PHP_MIN_HIGH, '>=');
+  }
+  
+  /**
+   * Current php version without extra.
+   *
+   * @return string
+   */
+  public static function phpVer() {
+    return str_replace(PHP_EXTRA_VERSION, "", PHP_VERSION);
   }
 
 }
