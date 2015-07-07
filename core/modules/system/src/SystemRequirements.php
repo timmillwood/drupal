@@ -12,9 +12,20 @@ namespace Drupal\system;
  */
 class SystemRequirements {
   
+  /**
+   * The minimum PHP version in the lower range
+   */
   public static $min_low = '5.5.21';
+  
+  /**
+   * The maximum PHP version in the lower range
+   */
   public static $max_low = '5.6.0';
-  public static $min_high = '5.6.22';
+  
+  /**
+   * The minimum PHP version in the higher range
+   */
+  public static $min_high = '5.6.5';
 
   /**
    * Determines whether the passed in PHP version disallows multiple statements.
