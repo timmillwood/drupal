@@ -87,7 +87,7 @@ function system_requirements($phase) {
   }
   elseif (($phase === 'install' || \Drupal::database()->driver() === 'mysql') && !SystemRequirements::phpVersionWithPdoDisallowMultipleStatements($phpversion)) {
     $requirements['php']['title'] = t('PHP (multiple statement disabling)');
-    $requirements['php']['description'] = t('PHP versions higher than %min_low or %min_high provide built-in SQL injection protection for mysql databases. It is recommended to update.', array('%min_low' => SystemRequirements::$minLow, '%min_high' => SystemRequirements::$minHigh));
+    $requirements['php']['description'] = t('PHP versions higher than %min_low or %min_high provide built-in SQL injection protection for mysql databases. It is recommended to update.', array('%min_low' => SystemRequirements::MIN_LOW, '%min_high' => SystemRequirements::MIN_HIGH));
     $requirements['php']['severity'] = REQUIREMENT_INFO;
   }
   elseif (version_compare($phpversion, DRUPAL_SUGGESTED_PHP) < 0) {
