@@ -91,7 +91,7 @@ function system_requirements($phase) {
     $requirements['php']['severity'] = REQUIREMENT_INFO;
   }
   elseif (version_compare($phpversion, DRUPAL_SUGGESTED_PHP) < 0) {
-    $requirements['php']['description'] = t('Your current PHP version (%version) is still compatible, but it is recommended to install PHP %suggested. Find more information about the <a href="@version_support">PHP requirements for Drupal</a>.', array('%version' => SystemRequirements::PHP_VER, '%suggested' => DRUPAL_SUGGESTED_PHP, '@version_support' => 'https://www.drupal.org/requirements/php'));
+    $requirements['php']['description'] = t('Your current PHP version (%version) is still compatible, but it is recommended to install PHP %suggested. Find more information about the <a href="@version_support">PHP requirements for Drupal</a>.', array('%version' => SystemRequirements::$phpVer, '%suggested' => DRUPAL_SUGGESTED_PHP, '@version_support' => 'https://www.drupal.org/requirements/php'));
     $requirements['php']['severity'] = REQUIREMENT_INFO;
   }
 

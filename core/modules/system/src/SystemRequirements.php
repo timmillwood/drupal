@@ -33,7 +33,7 @@ class SystemRequirements {
   /**
    * Current version is a more readable version.
    */
-  const PHP_VER = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION;
+  public static $phpVer = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . '.' . PHP_RELEASE_VERSION;
   /**
    * Determines whether the passed in PHP version disallows multiple statements.
    *
