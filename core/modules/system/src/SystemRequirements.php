@@ -42,8 +42,8 @@ class SystemRequirements {
    * @return bool
    */
   public static function phpVersionWithPdoDisallowMultipleStatements($phpversion) {
-    return (version_compare($phpversion, self::MIN_LOW, '>=') && version_compare($phpversion, self::MAX_LOW, '<'))
-      || version_compare($phpversion, self::MIN_HIGH, '>=');
+    return (version_compare($phpversion, self::PHP_MIN_LOW, '>=') && version_compare($phpversion, self::PHP_MAX_LOW, '<'))
+      || version_compare($phpversion, self::PHP_MIN_HIGH, '>=');
   }
 
 }
