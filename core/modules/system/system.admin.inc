@@ -185,11 +185,8 @@ function template_preprocess_status_report(&$variables) {
     if (isset($requirement['severity'])) {
       $severity = $severities[(int) $requirement['severity']];
     }
-    elseif (defined('MAINTENANCE_MODE') && MAINTENANCE_MODE == 'install') {
-      $severity = $severities[REQUIREMENT_OK];
-    }
     else {
-      $severity = $severities[REQUIREMENT_INFO];
+      $severity = $severities[REQUIREMENT_OK];
     }
     $variables['requirements'][$i]['severity_title'] = $severity['title'];
     $variables['requirements'][$i]['severity_status'] = $severity['status'];
