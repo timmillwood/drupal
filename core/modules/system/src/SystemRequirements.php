@@ -11,17 +11,17 @@ namespace Drupal\system;
  * Class for helper methods used for the system requirements.
  */
 class SystemRequirements {
-  
+
   /**
    * The minimum PHP version in the lower range
    */
   public static $min_low = '5.5.21';
-  
+
   /**
    * The maximum PHP version in the lower range
    */
   public static $max_low = '5.6.0';
-  
+
   /**
    * The minimum PHP version in the higher range
    */
