@@ -87,11 +87,11 @@ function system_requirements($phase) {
   }
   elseif (($phase === 'install' || \Drupal::database()->driver() === 'mysql') && !SystemRequirements::phpVersionWithPdoDisallowMultipleStatements($phpversion)) {
     $requirements['php']['title'] = t('PHP (multiple statement disabling)');
-    $requirements['php']['description'] = t('PHP versions higher than %min_low or %min_high provide built-in SQL injection protection for mysql databases. It is recommended to update.', array('%min_low' => SystemRequirements::MIN_LOW, '%min_high' => SystemRequirements::MIN_HIGH));
+    $requirements['php']['description'] = t('PHP versions higher than %min_low or %min_high provide built-in SQL injection protection for mysql databases. It is recommended to update.', array('%min_low' => SystemRequirements::PHP_MIN_LOW, '%min_high' => SystemRequirements::PHP_MIN_HIGH));
     $requirements['php']['severity'] = REQUIREMENT_INFO;
   }
   elseif (version_compare($phpversion, DRUPAL_SUGGESTED_PHP) < 0) {
-    $requirements['php']['description'] = t('Your current PHP installation is still supported, but it is recommended to use PHP %version. Find more information about the <a href="@version_support">PHP requirements for Drupal</a>.', array('%version' => DRUPAL_SUGGESTED_PHP, '@version_support' => 'https://www.drupal.org/requirements/php'));
+    $requirements['php']['description'] = t('Your current PHP version (%version) is still compatible, but it is recommended to install PHP %suggested. Find more information about the <a href="@version_support">PHP requirements for Drupal</a>.', array('%version' => SystemRequirements::PHP_VER, '%suggested' => DRUPAL_SUGGESTED_PHP, '@version_support' => 'https://www.drupal.org/requirements/php'));
     $requirements['php']['severity'] = REQUIREMENT_INFO;
   }
 
