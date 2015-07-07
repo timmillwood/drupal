@@ -13,6 +13,24 @@ namespace Drupal\system;
 class SystemRequirements {
 
   /**
+   * The minimum PHP version in the lower range for the introduction
+   * of PDO::MYSQL_ATTR_MULTI_STATEMENTS.
+   */
+  public static $minLow = '5.5.21';
+
+  /**
+   * The maximum PHP version in the lower range for the introduction
+   * of PDO::MYSQL_ATTR_MULTI_STATEMENTS.
+   */
+  public static $maxLow = '5.6.0';
+
+  /**
+   * The minimum PHP version in the higher range for the introduction
+   * of PDO::MYSQL_ATTR_MULTI_STATEMENTS.
+   */
+  public static $minHigh = '5.6.5';
+
+  /**
    * Determines whether the passed in PHP version disallows multiple statements.
    *
    * @param string $phpversion
@@ -20,10 +38,8 @@ class SystemRequirements {
    * @return bool
    */
   public static function phpVersionWithPdoDisallowMultipleStatements($phpversion) {
-    // PDO::MYSQL_ATTR_MULTI_STATEMENTS was introduced in PHP versions 5.5.21
-    // and 5.6.5.
-    return (version_compare($phpversion, '5.5.21', '>=') && version_compare($phpversion, '5.6.0', '<'))
-      || version_compare($phpversion, '5.6.5', '>=');
+    return (version_compare($phpversion, self::$minLow, '>=') && version_compare($phpversion, self::$maxLow, '<'))
+      || version_compare($phpversion, self::$minHigh, '>=');
   }
 
 }
