@@ -41,7 +41,7 @@ class SystemRequirements {
     return (version_compare($phpversion, self::PHP_MIN_LOW, '>=') && version_compare($phpversion, self::PHP_MAX_LOW, '<'))
       || version_compare($phpversion, self::PHP_MIN_HIGH, '>=');
   }
-  
+
   /**
    * Current php version without extra.
    *
