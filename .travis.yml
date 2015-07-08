@@ -13,8 +13,8 @@ env:
   global:
     - SIMPLETEST_BASE_URL=http://127.0.0.1:8080
   matrix:
-    - COMPOSER_OPTS=""
-    - COMPOSER_OPTS=" --prefer-stable --prefer-lowest"  
+    - COMPOSER_OPTS="--prefer-source"
+    - COMPOSER_OPTS="--prefer-source --prefer-stable --prefer-lowest"  
 
 mysql:
   database: drupal
@@ -36,10 +36,10 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   
   # setting github token
-  - composer config github-oauth.github.com 
+  - composer config -g github-oauth.github.com 
   - 
   # Install dependencies
-  - composer --working-dir=core --no-interaction --prefer-source update$COMPOSER_OPTS
+  - composer --working-dir=core --no-interaction update $COMPOSER_OPTS
 
   # Install drush globally
   - composer global require drush/drush:dev-master
