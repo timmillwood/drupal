@@ -36,7 +36,7 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
   # Install dependencies
-  - composer --working-dir=core --no-interaction update$COMPOSER_OPTS
+  - composer --working-dir=core --no-interaction --prefer-source update$COMPOSER_OPTS
 
   # Install drush globally
   - composer global require drush/drush:dev-master
