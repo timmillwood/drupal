@@ -8,8 +8,12 @@ php:
 matrix:
   allow_failures:
     - php: 5.4
+
 env:
   - SIMPLETEST_BASE_URL=http://127.0.0.1:8080
+  - COMPOSER_OPTS=""
+  - COMPOSER_OPTS=" --prefer-stable --prefer-lowest"  
+
 mysql:
   database: drupal
   username: root
@@ -27,7 +31,7 @@ install:
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
 
   # Install dependencies
-  - composer --working-dir=core --prefer-dist install
+  - composer --working-dir=core --prefer-dist$COMPOSER_OPTS install
 
   # Install drush globally
   - composer global require drush/drush:dev-master
