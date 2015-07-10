@@ -11,6 +11,9 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\statistics\StatisticsStorageInterface;
 
 /**
  * Provides a 'Popular content' block.
@@ -20,7 +23,14 @@ use Drupal\Core\Session\AccountInterface;
  *   admin_label = @Translation("Popular content")
  * )
  */
-class StatisticsPopularBlock extends BlockBase {
+class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The storage for statistics.
+   *
+   * @var \Drupal\statistics\StatisticsStorageInterface
+   */
+  protected $statisticsStorage;
 
   /**
    * Number of day's top views to display.
@@ -44,6 +54,35 @@ class StatisticsPopularBlock extends BlockBase {
   protected $last_list;
 
   /**
+   * Constructs an StatisticsPopularBlock object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\statistics\StatisticsStorageInterface $statistics_storage
+   *   The storage for statistics.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, StatisticsStorageInterface $statistics_storage) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->statisticsStorage = $statistics_storage;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('statistics.statistics_storage')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
@@ -59,19 +98,18 @@ class StatisticsPopularBlock extends BlockBase {
    */
   protected function blockAccess(AccountInterface $account) {
 
-    $storage = \Drupal::service('statistics.statistics_storage');
     $access = AccessResult::allowedIfHasPermission($account, 'access content');
     if ($account->hasPermission('access content')) {
       $daytop = $this->configuration['top_day_num'];
-      if (!$daytop || !($result = $storage->statisticsTitleList('daycount', $daytop)) || !($this->day_list = node_title_list($result, $this->t("Today's:")))) {
+      if (!$daytop || !($result = $this->statisticsStorage->statisticsTitleList('daycount', $daytop)) || !($this->day_list = node_title_list($result, $this->t("Today's:")))) {
         return AccessResult::forbidden()->inheritCacheability($access);
       }
       $alltimetop = $this->configuration['top_all_num'];
-      if (!$alltimetop || !($result = $storage->statisticsTitleList('totalcount', $alltimetop)) || !($this->all_time_list = node_title_list($result, $this->t('All time:')))) {
+      if (!$alltimetop || !($result = $this->statisticsStorage->statisticsTitleList('totalcount', $alltimetop)) || !($this->all_time_list = node_title_list($result, $this->t('All time:')))) {
         return AccessResult::forbidden()->inheritCacheability($access);
       }
       $lasttop = $this->configuration['top_last_num'];
-      if (!$lasttop || !($result = $storage->statisticsTitleList('timestamp', $lasttop)) || !($this->last_list = node_title_list($result, $this->t('Last viewed:')))) {
+      if (!$lasttop || !($result = $this->statisticsStorage->statisticsTitleList('timestamp', $lasttop)) || !($this->last_list = node_title_list($result, $this->t('Last viewed:')))) {
         return AccessResult::forbidden()->inheritCacheability($access);
       }
       return $access;
