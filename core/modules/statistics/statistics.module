@@ -69,37 +69,30 @@ function statistics_node_links_alter(array &$node_links, NodeInterface $entity, 
  */
 function statistics_cron() {
   $storage = \Drupal::service('statistics.statistics_storage');
-  $statistics_timestamp = \Drupal::state()->get('statistics.day_timestamp') ?: 0;
-
-  if ((REQUEST_TIME - $statistics_timestamp) >= 86400) {
-    // Reset day counts
+  if ($storage->needsReset()) {
     $storage->resetDayCount();
-    \Drupal::state()->set('statistics.day_timestamp', REQUEST_TIME);
   }
 
-  // Calculate the maximum of node views, for node search ranking.
   $max_total_count = $storage->maxTotalCount();
-  \Drupal::state()->set('statistics.node_counter_scale', 1.0 / max(1.0, $max_total_count));
+}
+
+/**
+ * Returns the most viewed content of all time, today, or the last-viewed node.
+ *
+ * @deprecated in Drupal 8.0.x
+ */
+function statistics_title_list($dbfield, $dbrows) {
+  return \Drupal::service('statistics.statistics_storage')->statisticsTitleList($dbfield, $dbrows);
 }
 
 /**
  * Retrieves a node's "view statistics".
  *
- * @param int $nid
- *   The node ID.
- *
- * @return array
- *   An associative array containing:
- *   - totalcount: Integer for the total number of times the node has been
- *     viewed.
- *   - daycount: Integer for the total number of times the node has been viewed
- *     "today". For the daycount to be reset, cron must be enabled.
- *   - timestamp: Integer for the timestamp of when the node was last viewed.
+ * @deprecated in Drupal 8.0.x
  */
 function statistics_get($nid) {
   if ($nid > 0) {
-    $storage = \Drupal::service('statistics.statistics_storage');
-    return $storage->fetchViews($nid);
+    return \Drupal::service('statistics.statistics_storage')->fetchViews($nid);
   }
 }
 
@@ -109,8 +102,7 @@ function statistics_get($nid) {
 function statistics_node_predelete(EntityInterface $node) {
   // Clean up statistics table when node is deleted.
   $nid = $node->id();
-  $storage = \Drupal::service('statistics.statistics_storage');
-  return $storage->clean($nid);
+  return \Drupal::service('statistics.statistics_storage')->clean($nid);
 }
 
 /**
