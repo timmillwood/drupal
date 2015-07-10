@@ -58,18 +58,20 @@ class StatisticsPopularBlock extends BlockBase {
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
+
+    $storage = \Drupal::service('statistics.statistics_storage');
     $access = AccessResult::allowedIfHasPermission($account, 'access content');
     if ($account->hasPermission('access content')) {
       $daytop = $this->configuration['top_day_num'];
-      if (!$daytop || !($result = statistics_title_list('daycount', $daytop)) || !($this->day_list = node_title_list($result, $this->t("Today's:")))) {
+      if (!$daytop || !($result = $storage->statisticsTitleList('daycount', $daytop)) || !($this->day_list = node_title_list($result, $this->t("Today's:")))) {
         return AccessResult::forbidden()->inheritCacheability($access);
       }
       $alltimetop = $this->configuration['top_all_num'];
-      if (!$alltimetop || !($result = statistics_title_list('totalcount', $alltimetop)) || !($this->all_time_list = node_title_list($result, $this->t('All time:')))) {
+      if (!$alltimetop || !($result = $storage->statisticsTitleList('totalcount', $alltimetop)) || !($this->all_time_list = node_title_list($result, $this->t('All time:')))) {
         return AccessResult::forbidden()->inheritCacheability($access);
       }
       $lasttop = $this->configuration['top_last_num'];
-      if (!$lasttop || !($result = statistics_title_list('timestamp', $lasttop)) || !($this->last_list = node_title_list($result, $this->t('Last viewed:')))) {
+      if (!$lasttop || !($result = $storage->statisticsTitleList('timestamp', $lasttop)) || !($this->last_list = node_title_list($result, $this->t('Last viewed:')))) {
         return AccessResult::forbidden()->inheritCacheability($access);
       }
       return $access;

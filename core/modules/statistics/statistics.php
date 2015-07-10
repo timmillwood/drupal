@@ -23,16 +23,7 @@ $views = $kernel->getContainer()
 if ($views) {
   $nid = filter_input(INPUT_POST, 'nid', FILTER_VALIDATE_INT);
   if ($nid) {
-    \Drupal::database()->merge('node_counter')
-      ->key('nid', $nid)
-      ->fields(array(
-        'daycount' => 1,
-        'totalcount' => 1,
-        'timestamp' => REQUEST_TIME,
-      ))
-      ->expression('daycount', 'daycount + 1')
-      ->expression('totalcount', 'totalcount + 1')
-      ->execute();
+    $kernel->getContainer()->get('statistics.statistics_storage')->recordHit($nid);
   }
 }
 
