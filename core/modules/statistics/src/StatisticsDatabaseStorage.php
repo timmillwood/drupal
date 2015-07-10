@@ -20,7 +20,7 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
-  
+
   /**
   * Construct the statistics storage.
   *
@@ -99,21 +99,8 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   }
 
   /**
-   * Returns the most viewed content of all time, today, or the last-viewed node.
-   *
-   * @param string $dbfield
-   *   The database field to use, one of:
-   *   - 'totalcount': Integer that shows the top viewed content of all time.
-   *   - 'daycount': Integer that shows the top viewed content for today.
-   *   - 'timestamp': Integer that shows only the last viewed node.
-   * @param int $dbrows
-   *   The number of rows to be returned.
-   *
-   * @return SelectQuery|FALSE
-   *   A query result containing the node ID, title, user ID that owns the node,
-   *   and the username for the selected node(s), or FALSE if the query could not
-   *   be executed correctly.
-   */
+  * {@inheritdoc}
+  */
   public function statisticsTitleList($dbfield, $dbrows) {
     if (in_array($dbfield, array('totalcount', 'daycount', 'timestamp'))) {
       $query = $this->connection->select('node_field_data', 'n');
