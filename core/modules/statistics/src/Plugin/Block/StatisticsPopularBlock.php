@@ -111,7 +111,6 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   protected function blockAccess(AccountInterface $account) {
-
     $access = AccessResult::allowedIfHasPermission($account, 'access content');
     if ($account->hasPermission('access content')) {
       $daytop = $this->configuration['top_day_num'];
