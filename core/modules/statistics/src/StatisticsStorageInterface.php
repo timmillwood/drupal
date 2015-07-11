@@ -42,6 +42,17 @@ interface StatisticsStorageInterface {
   public function fetchViews($nid);
 
   /**
+   * Returns the number of times a node has been viewed.
+   *
+   * @param strign $order
+   *   The column name to order by.
+   *
+   * @return array
+   *   An ordered array of node ids.
+   */
+  public function fetchAll($order = 'totalcount', $limit = 5);
+
+  /**
    * Delete counts for a specific node.
    *
    * @param int $nid
@@ -75,26 +86,5 @@ interface StatisticsStorageInterface {
    *   The highest 'totalcount' value.
    */
   public function maxTotalCount();
-
-  /**
-   * Returns the most viewed content of all time, today, or the last-viewed node.
-   * Used primarily in StatisticsPopularBlock and passed to node_title_list.
-   *
-   * @todo Offer more helpers for generating the database result object to node_title_list.
-   *
-   * @param string $dbfield
-   *   The database field to use, one of:
-   *   - 'totalcount': Integer that shows the top viewed content of all time.
-   *   - 'daycount': Integer that shows the top viewed content for today.
-   *   - 'timestamp': Integer that shows only the last viewed node.
-   * @param int $dbrows
-   *   The number of rows to be returned.
-   *
-   * @return SelectQuery|FALSE
-   *   A query result containing the node ID, title, user ID that owns the node,
-   *   and the username for the selected node(s), or FALSE if the query could not
-   *   be executed correctly.
-   */
-  public function statisticsTitleList($dbfield, $dbrows);
 
 }
