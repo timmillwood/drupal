@@ -63,6 +63,16 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   /**
   * {@inheritdoc}
   */
+  public function fetchAll($order = 'totalcount', $limit = 5) {
+    return $this->connection->select('node_counter', 'nc')
+      ->fields('nc', array('nid'))
+      ->orderBy($order, 'DESC')->range(0, $limit)
+      ->execute()->fetchCol();
+  }
+
+  /**
+  * {@inheritdoc}
+  */
   public function clean($nid) {
     return (bool) $this->connection->delete('node_counter')
       ->condition('nid', $nid)
@@ -98,29 +108,4 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
     return $max_total_count;
   }
 
-  /**
-  * {@inheritdoc}
-  */
-  public function statisticsTitleList($dbfield, $dbrows) {
-    if (in_array($dbfield, array('totalcount', 'daycount', 'timestamp'))) {
-      $query = $this->connection->select('node_field_data', 'n');
-      $query->addTag('node_access');
-      $query->join('node_counter', 's', 'n.nid = s.nid');
-      $query->join('users_field_data', 'u', 'n.uid = u.uid');
-
-      return $query
-        ->fields('n', array('nid', 'title'))
-        ->fields('u', array('uid', 'name'))
-        ->condition($dbfield, 0, '<>')
-        ->condition('n.status', 1)
-        // @todo This should be actually filtering on the desired node status
-        // field language and just fall back to the default language.
-        ->condition('n.default_langcode', 1)
-        ->condition('u.default_langcode', 1)
-        ->orderBy($dbfield, 'DESC')
-        ->range(0, $dbrows)
-        ->execute();
-    }
-    return FALSE;
-  }
 }
