@@ -395,11 +395,20 @@ class Drupal {
   /**
    * Returns the default http client.
    *
-   * @return \GuzzleHttp\ClientInterface
+   * @return \GuzzleHttp\Client
    *   A guzzle http client instance.
    */
   public static function httpClient() {
     return static::getContainer()->get('http_client');
+  }
+
+  /**
+   * Returns a factory for guzzle HTTP clients with Drupal options.
+   *
+   * @return \Drupal\Core\Http\ClientFactory
+   */
+  public static function httpClientFactory() {
+    return static::getContainer()->get('http_client_factory');
   }
 
   /**
