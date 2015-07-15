@@ -1,10 +1,17 @@
 <?php
+/**
+ * @file
+ * Contains \Drupal\statistics\StatisticsDatabaseStorage.
+ */
 
 namespace Drupal\statistics;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\State\StateInterface;
 
+/**
+ * Provides the default database storage backend for statistics module.
+ */
 class StatisticsDatabaseStorage implements StatisticsStorageInterface {
 
   /**
