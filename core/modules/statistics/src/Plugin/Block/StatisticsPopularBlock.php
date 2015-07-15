@@ -11,7 +11,6 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Cache\Cache;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -199,14 +198,14 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
 
     $items = array();
     foreach ($counts as $count) {
-      $items [] = \Drupal::l($nodes[$count]->getTitle(), new Url('entity.node.canonical', ['node' => $count], array()));
+      $items [] = \Drupal::l($nodes[$count]->getTitle(), $nodes[$count]->urlInfo());
     }
 
     return array(
       '#theme' => 'item_list__node',
       '#items' => $items,
       '#title' => $title,
-      '#cache' => ['tags' => Cache::mergeTags(['node_list'],Cache::buildTags('node', $counts))]
+      '#cache' => ['tags' => Cache::mergeTags(['node_list'], Cache::buildTags('node', $counts))]
       );
   }
 
