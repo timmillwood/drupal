@@ -198,7 +198,7 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
 
     $items = array();
     foreach ($counts as $count) {
-      $items [] = \Drupal::l($nodes[$count]->getTitle(), $nodes[$count]->urlInfo());
+      $items [] = \Drupal::l($nodes[$count]->getTitle(), $nodes[$count]->urlInfo('canonical'));
     }
 
     return array(
