@@ -49,8 +49,7 @@ class StatisticsReportsTest extends StatisticsTestBase {
     $this->assertText('All time', 'Found the all time popular content.');
     $this->assertText('Last viewed', 'Found the last viewed popular content.');
 
-    // statistics.module doesn't use node entities, prevent the node language
-    // from being added to the options.
+    // Check if the node link is displayed.
     $this->assertRaw(\Drupal::l($node->label(), $node->urlInfo('canonical')), 'Found link to visited node.');
   }
 
