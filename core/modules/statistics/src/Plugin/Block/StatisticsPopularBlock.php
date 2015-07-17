@@ -203,14 +203,21 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
         '#type' => 'link',
         '#title' => $nodes[$count]->getTitle(),
         '#url' => $nodes[$count]->urlInfo('canonical'),
-      )
+        '#cache' => array(
+          'context' => $nodes[$count]->getCacheContexts(),
+          'tags' => $nodes[$count]->getCacheTags(),
+        ),
+      );
     }
 
     return array(
       '#theme' => 'item_list__node',
       '#items' => $items,
       '#title' => $title,
-      '#cache' => ['tags' => Cache::mergeTags(['node_list'], Cache::buildTags('node', $counts))]
+      '#cache' => array(
+          'context' => 'user.roles',
+          'tags' => $this->entityManager->getDefinition('node')->getListCacheTags(),
+        ),
       );
   }
 
