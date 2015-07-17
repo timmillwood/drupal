@@ -193,12 +193,17 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
     return $content;
   }
 
-  protected function nodeTitleList($counts, $title){
+  protected function nodeTitleList($counts, $title) {
     $nodes = $this->entityManager->getStorage('node')->loadMultiple($counts);
 
     $items = array();
     foreach ($counts as $count) {
-      $items [] = \Drupal::l($nodes[$count]->getTitle(), $nodes[$count]->urlInfo('canonical'));
+      // $items [] = \Drupal::l($nodes[$count]->getTitle(), $nodes[$count]->urlInfo('canonical'));
+      $items [] = array(
+        '#type' => 'link',
+        '#title' => $nodes[$count]->getTitle(),
+        '#url' => $nodes[$count]->urlInfo('canonical'),
+      )
     }
 
     return array(
