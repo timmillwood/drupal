@@ -57,12 +57,3 @@ function statistics_schema() {
 
   return $schema;
 }
-
-/**
- * Implements hook_update_N().
- */
-function statistics_update_8001() {
-  if (!\Drupal::moduleHandler()->moduleExists('node')) {
-    \Drupal::service('module_installer')->install(array('node'), TRUE);
-  }
-}
