@@ -61,7 +61,7 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   * {@inheritdoc}
   */
   public function fetchViews($nid) {
-    // Retrieve an array with both totalcount, daycount and timestamp.
+    // Retrieve an array, which includes totalcount, daycount, and timestamp.
     return $this->connection->select('node_counter', 'nc')
       ->fields('nc', array('totalcount', 'daycount', 'timestamp'))
       ->condition('nid', $nid, '=')->execute()->fetchAssoc();
@@ -71,10 +71,13 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   * {@inheritdoc}
   */
   public function fetchAll($order = 'totalcount', $limit = 5) {
-    return $this->connection->select('node_counter', 'nc')
-      ->fields('nc', array('nid'))
-      ->orderBy($order, 'DESC')->range(0, $limit)
-      ->execute()->fetchCol();
+    if (in_array($order, array('totalcount', 'daycount', 'timestamp'))) {
+      return $this->connection->select('node_counter', 'nc')
+        ->fields('nc', array('nid'))
+        ->orderBy($order, 'DESC')->range(0, $limit)
+        ->execute()->fetchCol();
+    }
+    return FALSE;
   }
 
   /**

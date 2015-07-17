@@ -44,8 +44,11 @@ interface StatisticsStorageInterface {
   /**
    * Returns the number of times a node has been viewed.
    *
-   * @param strign $order
-   *   The column name to order by.
+   * @param string $order
+   *   The counter name to order by:
+   *   - 'totalcount' The total number of views.
+   *   - 'daycount' The number of views today.
+   *   - 'timestamp' The unix timestamp of the last view.
    *
    * @return array
    *   An ordered array of node ids.
@@ -64,7 +67,10 @@ interface StatisticsStorageInterface {
   public function clean($nid);
 
   /**
-   * Returns if reset is needed.
+   * A reset is performed daily.
+   * Returns if 24 hours has passed since the last reset.
+   *
+   * @see StatisticsStorageInterface::resetDayCount()  To perform the reset.
    *
    * @return bool
    *  TRUE if reset is needed.
