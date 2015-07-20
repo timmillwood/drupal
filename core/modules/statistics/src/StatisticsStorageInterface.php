@@ -68,7 +68,9 @@ interface StatisticsStorageInterface {
 
   /**
    * A reset is performed daily.
-   * Returns if 24 hours has passed since the last reset.
+   *
+   * Returns true if it's been more than 24 hours since daily totals have been
+   * reset.
    *
    * @see StatisticsStorageInterface::resetDayCount()  To perform the reset.
    *
