@@ -50,6 +50,9 @@ interface StatisticsStorageInterface {
    *   - 'daycount' The number of views today.
    *   - 'timestamp' The unix timestamp of the last view.
    *
+   * @param int $limit
+   * The number of node ids to return.
+   *
    * @return array
    *   An ordered array of node ids.
    */

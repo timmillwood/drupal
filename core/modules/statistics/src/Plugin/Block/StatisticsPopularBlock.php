@@ -193,6 +193,18 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
     return $content;
   }
 
+  /**
+   * Generates the render array for the block.
+   *
+   * @param array $counts
+   * An ordered array of node ids.
+   *
+   * @param string $title
+   * The title for the list. 
+   *
+   * @return array
+   *  A render array for the list.
+   */
   protected function nodeTitleList($counts, $title) {
     $nodes = $this->entityManager->getStorage('node')->loadMultiple($counts);
 
@@ -214,7 +226,7 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
       '#items' => $items,
       '#title' => $title,
       '#cache' => array(
-          'context' => 'user.roles',
+          'context' => 'user.permissions',
           'tags' => $this->entityManager->getDefinition('node')->getListCacheTags(),
         ),
       );
