@@ -71,13 +71,15 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   * {@inheritdoc}
   */
   public function fetchAll($order = 'totalcount', $limit = 5) {
-    if (in_array($order, array('totalcount', 'daycount', 'timestamp'))) {
-      return $this->connection->select('node_counter', 'nc')
-        ->fields('nc', array('nid'))
-        ->orderBy($order, 'DESC')->range(0, $limit)
-        ->execute()->fetchCol();
+    // @todo replace exception with assert() - #2408013.
+    if (!in_array($order, ['totalcount', 'daycount', 'timestamp'])) {
+      throw new \InvalidArgumentException();
     }
-    return FALSE;
+
+    return $this->connection->select('node_counter', 'nc')
+      ->fields('nc', array('nid'))
+      ->orderBy($order, 'DESC')->range(0, $limit)
+      ->execute()->fetchCol();
   }
 
   /**
