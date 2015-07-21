@@ -63,6 +63,18 @@ function statistics_schema() {
  */
 function statistics_update_8001() {
   if (!\Drupal::moduleHandler()->moduleExists('node')) {
-    \Drupal::service('module_installer')->install(array('node'), TRUE);
+    $result = db_select('node_counter', 'nc')
+      ->countQuery()
+      ->range(0,1)
+      ->execute()
+      ->fetchField();
+    if ($result == 0) {
+      \Drupal::service('module_installer')->uninstall(array('statistics'), TRUE);
+      drupal_set_message('The statistics module depends on the node module and has therefore been uninstalled','status');
+    }
+    else {
+      \Drupal::service('module_installer')->install(array('node'), TRUE);
+      drupal_set_message('The node module is required for the statistics module and has therefore been installed.','status');
+    }
   }
 }
