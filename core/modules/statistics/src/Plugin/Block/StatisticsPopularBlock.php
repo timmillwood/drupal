@@ -99,11 +99,11 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array(
+    return [
       'top_day_num' => 0,
       'top_all_num' => 0,
       'top_last_num' => 0
-    );
+    ];
   }
 
   /**
@@ -134,29 +134,29 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
    */
   public function blockForm($form, FormStateInterface $form_state) {
     // Popular content block settings.
-    $numbers = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40);
-    $numbers = array('0' => $this->t('Disabled')) + array_combine($numbers, $numbers);
-    $form['statistics_block_top_day_num'] = array(
+    $numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40];
+    $numbers = ['0' => $this->t('Disabled')] + array_combine($numbers, $numbers);
+    $form['statistics_block_top_day_num'] = [
      '#type' => 'select',
      '#title' => $this->t("Number of day's top views to display"),
      '#default_value' => $this->configuration['top_day_num'],
      '#options' => $numbers,
      '#description' => $this->t('How many content items to display in "day" list.'),
-    );
-    $form['statistics_block_top_all_num'] = array(
+    ];
+    $form['statistics_block_top_all_num'] = [
       '#type' => 'select',
       '#title' => $this->t('Number of all time views to display'),
       '#default_value' => $this->configuration['top_all_num'],
       '#options' => $numbers,
       '#description' => $this->t('How many content items to display in "all time" list.'),
-    );
-    $form['statistics_block_top_last_num'] = array(
+    ];
+    $form['statistics_block_top_last_num'] = [
       '#type' => 'select',
       '#title' => $this->t('Number of most recent views to display'),
       '#default_value' => $this->configuration['top_last_num'],
       '#options' => $numbers,
       '#description' => $this->t('How many content items to display in "recently viewed" list.'),
-    );
+    ];
     return $form;
   }
 
@@ -173,7 +173,7 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function build() {
-    $content = array();
+    $content = [];
 
     if ($this->day_list) {
       $content['top_day'] = $this->nodeTitleList($this->day_list, $this->t("Today's:"));
@@ -197,39 +197,40 @@ class StatisticsPopularBlock extends BlockBase implements ContainerFactoryPlugin
    * Generates the render array for the block.
    *
    * @param array $counts
-   * An ordered array of node ids.
+   *   An ordered array of node ids.
    *
    * @param string $title
-   * The title for the list. 
+   *   The title for the list.
    *
    * @return array
-   *  A render array for the list.
+   *   A render array for the list.
    */
   protected function nodeTitleList($counts, $title) {
     $nodes = $this->entityManager->getStorage('node')->loadMultiple($counts);
 
-    $items = array();
+    $items = [];
     foreach ($counts as $count) {
-      $items [] = array(
+      $node = $this->entityManager->getTranslationFromContext($nodes[$count]);
+      $items[] = [
         '#type' => 'link',
-        '#title' => $nodes[$count]->getTitle(),
-        '#url' => $nodes[$count]->urlInfo('canonical'),
-        '#cache' => array(
-          'context' => $nodes[$count]->getCacheContexts(),
-          'tags' => $nodes[$count]->getCacheTags(),
-        ),
-      );
+        '#title' => $node->getTitle(),
+        '#url' => $node->urlInfo('canonical'),
+        '#cache' => [
+          'context' => $node->getCacheContexts(),
+          'tags' => $node->getCacheTags(),
+        ],
+      ];
     }
 
-    return array(
+    return [
       '#theme' => 'item_list__node',
       '#items' => $items,
       '#title' => $title,
-      '#cache' => array(
-          'context' => 'user.permissions',
-          'tags' => $this->entityManager->getDefinition('node')->getListCacheTags(),
-        ),
-      );
+      '#cache' => [
+        'context' => 'user.permissions',
+        'tags' => $this->entityManager->getDefinition('node')->getListCacheTags(),
+      ],
+    ];
   }
 
 }

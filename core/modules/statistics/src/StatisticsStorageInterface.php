@@ -8,7 +8,8 @@
 namespace Drupal\statistics;
 
 /**
- * Provides an interface defining Statistics Storage
+ * Provides an interface defining Statistics Storage.
+ *
  * Stores the views per day, total views and timestamp of last view
  * for all nodes on the site.
  */
@@ -18,7 +19,7 @@ interface StatisticsStorageInterface {
    * Count a node view.
    *
    * @param int $nid
-   *   The id of the node to count.
+   *   The ID of the node to count.
    *
    * @return bool
    *   TRUE if the node view has been counted.
@@ -29,7 +30,7 @@ interface StatisticsStorageInterface {
    * Returns the number of times a node has been viewed.
    *
    * @param int $nid
-   *   The id of the node to fetch the views for.
+   *   The ID of the node to fetch the views for.
    *
    * @return array
    *   An associative array containing:
@@ -51,10 +52,10 @@ interface StatisticsStorageInterface {
    *   - 'timestamp' The unix timestamp of the last view.
    *
    * @param int $limit
-   * The number of node ids to return.
+   *   The number of node IDs to return.
    *
    * @return array
-   *   An ordered array of node ids.
+   *   An ordered array of node IDs.
    */
   public function fetchAll($order = 'totalcount', $limit = 5);
 
@@ -62,7 +63,7 @@ interface StatisticsStorageInterface {
    * Delete counts for a specific node.
    *
    * @param int $nid
-   *   The id of the node which views to delete.
+   *   The ID of the node which views to delete.
    *
    * @return bool
    *   TRUE if the node views have been deleted.

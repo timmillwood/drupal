@@ -29,7 +29,7 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   protected $state;
 
   /**
-  * Construct the statistics storage.
+  * Constructs the statistics storage.
   *
   * @param \Drupal\Core\Database\Connection $connection
   *   The database connection for the node view storage.
@@ -47,11 +47,11 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   public function recordHit($nid) {
     return (bool) $this->connection->merge('node_counter')
       ->key('nid', $nid)
-      ->fields(array(
+      ->fields([
         'daycount' => 1,
         'totalcount' => 1,
         'timestamp' => REQUEST_TIME,
-      ))
+      ])
       ->expression('daycount', 'daycount + 1')
       ->expression('totalcount', 'totalcount + 1')
       ->execute();
@@ -63,7 +63,7 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   public function fetchViews($nid) {
     // Retrieve an array, which includes totalcount, daycount, and timestamp.
     return $this->connection->select('node_counter', 'nc')
-      ->fields('nc', array('totalcount', 'daycount', 'timestamp'))
+      ->fields('nc', ['totalcount', 'daycount', 'timestamp'])
       ->condition('nid', $nid, '=')->execute()->fetchAssoc();
   }
 
@@ -77,7 +77,7 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
     }
 
     return $this->connection->select('node_counter', 'nc')
-      ->fields('nc', array('nid'))
+      ->fields('nc', ['nid'])
       ->orderBy($order, 'DESC')->range(0, $limit)
       ->execute()->fetchCol();
   }
@@ -105,7 +105,7 @@ class StatisticsDatabaseStorage implements StatisticsStorageInterface {
   public function resetDayCount() {
     $this->state->set('statistics.day_timestamp', REQUEST_TIME);
     return (bool) $this->connection->update('node_counter')
-      ->fields(array('daycount' => 0))
+      ->fields(['daycount' => 0])
       ->execute();
   }
 
