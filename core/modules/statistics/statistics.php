@@ -14,8 +14,9 @@ $autoloader = require_once 'autoload.php';
 
 $kernel = DrupalKernel::createFromRequest(Request::createFromGlobals(), $autoloader, 'prod');
 $kernel->boot();
+$container = $kernel->getContainer();
 
-$views = $kernel->getContainer()
+$views = $container
   ->get('config.factory')
   ->get('statistics.settings')
   ->get('count_content_views');
@@ -23,7 +24,8 @@ $views = $kernel->getContainer()
 if ($views) {
   $nid = filter_input(INPUT_POST, 'nid', FILTER_VALIDATE_INT);
   if ($nid) {
-    $kernel->getContainer()->get('statistics.statistics_storage')->recordHit($nid);
+    $container->get('request_stack')->push(Request::createFromGlobals());
+    $container->get('statistics.statistics_storage')->recordHit($nid);
   }
 }
 

@@ -7,12 +7,17 @@
 
 namespace Drupal\statistics\Tests;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\system\Tests\Cache\AssertPageCacheContextsAndTagsTrait;
+
 /**
  * Tests display of statistics report blocks.
  *
  * @group statistics
  */
 class StatisticsReportsTest extends StatisticsTestBase {
+
+  use AssertPageCacheContextsAndTagsTrait;
 
   /**
    * Tests the "popular content" block.
@@ -35,7 +40,7 @@ class StatisticsReportsTest extends StatisticsTestBase {
     $client->post($stats_path, array('headers' => $headers, 'body' => $post));
 
     // Configure and save the block.
-    $this->drupalPlaceBlock('statistics_popular_block', array(
+    $block = $this->drupalPlaceBlock('statistics_popular_block', array(
       'label' => 'Popular content',
       'top_day_num' => 3,
       'top_all_num' => 3,
@@ -48,6 +53,14 @@ class StatisticsReportsTest extends StatisticsTestBase {
     $this->assertText("Today's", "Found today's popular content.");
     $this->assertText('All time', 'Found the all time popular content.');
     $this->assertText('Last viewed', 'Found the last viewed popular content.');
+    
+    $this->assertCacheTags(array_merge(
+      $node->getCacheTags(),
+      $block->getCacheTags(),
+      $this->blockingUser->getCacheTags(),
+      ['block_view', 'config:block_list', 'node_list', 'rendered', 'user_view']
+    ));
+    $this->assertCacheContexts($node->getCacheContexts());
 
     // Check if the node link is displayed.
     $this->assertRaw(\Drupal::l($node->label(), $node->urlInfo('canonical')), 'Found link to visited node.');
