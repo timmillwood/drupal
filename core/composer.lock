@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a842b991264d42a2f8c5cecbd82597b1",
+    "hash": "c0367ca48fcc7d2ef2399ba719a0bfe9",
     "packages": [
         {
             "name": "behat/mink",
@@ -450,6 +450,57 @@
                 "spl"
             ],
             "time": "2014-05-21 19:28:51"
+        },
+        {
+            "name": "doctrine/couchdb",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/couchdb-client.git",
+                "reference": "5e8d808eba8d790d178e5558c182c648a12ec8e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/couchdb-client/zipball/5e8d808eba8d790d178e5558c182c648a12ec8e4",
+                "reference": "5e8d808eba8d790d178e5558c182c648a12ec8e4",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": "@stable",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\CouchDB": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Lukas Kahwe Smith",
+                    "email": "smith@pooteeweet.org"
+                }
+            ],
+            "description": "CouchDB Client",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "couchdb",
+                "persistence"
+            ],
+            "time": "2015-07-06 16:08:10"
         },
         {
             "name": "doctrine/inflector",
@@ -3449,7 +3500,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "doctrine/couchdb": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -35,7 +35,8 @@
     "fabpot/goutte": "^2.0.3",
     "masterminds/html5": "~2.1",
     "symfony/psr-http-message-bridge": "v0.2",
-    "zendframework/zend-diactoros": "1.1.0"
+    "zendframework/zend-diactoros": "1.1.0",
+    "doctrine/couchdb": "@dev"
   },
   "replace": {
     "drupal/action": "self.version",
