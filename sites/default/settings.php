@@ -217,8 +217,14 @@
  *   );
  * @endcode
  */
-$databases = array();
-
+   $databases['default']['default'] = array(
+     'driver' => 'mysql',
+     'database' => 'drupal',
+     'username' => 'homestead',
+     'password' => 'secret',
+     'host' => 'localhost',
+     'prefix' => '',
+   );
 /**
  * Location of the site configuration files.
  *
@@ -284,7 +290,7 @@ $config_directories = array();
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = '';
+$settings['hash_salt'] = 'wBIMTTWAJMTlSgmki9XByfrQqoAGHinkedA9-RbvxVpIOX8MzNHwIQWaH_ddEYdn_Q1QgUa0AQ';
 
 /**
  * Deployment identifier.
@@ -393,11 +399,6 @@ $settings['update_free_access'] = FALSE;
 /**
  * Class Loader.
  *
- * Enable the following to dump a classmap for the modules.
- */
-# $settings['classloader_dump_modules_classmap'] = TRUE;
-
-/**
  * If the APC extension is detected, the Symfony APC class loader is used for
  * performance reasons. Detection can be prevented by setting
  * class_loader_auto_detect to false, as in the example below.
@@ -424,7 +425,6 @@ if ($settings['hash_salt']) {
   $class_loader->unregister();
   $apc_loader->register();
   $class_loader = $apc_loader;
-#  $settings['classloader_dump_modules_classmap'] = FALSE;
 }
 */
 
@@ -639,15 +639,6 @@ if ($settings['hash_salt']) {
 $settings['container_yamls'][] = __DIR__ . '/services.yml';
 
 /**
- * Override the default service container class.
- *
- * This is useful for example to trace the service container for performance
- * tracking purposes, for testing a service container with an error condition or
- * to test a service container that throws an exception.
- */
-# $settings['container_base_class'] = '\Drupal\Core\DependencyInjection\Container';
-
-/**
  * Trusted host configuration.
  *
  * Drupal core can use the Symfony trusted host mechanism to prevent HTTP Host
@@ -697,3 +688,27 @@ $settings['container_yamls'][] = __DIR__ . '/services.yml';
 # if (file_exists(__DIR__ . '/settings.local.php')) {
 #   include __DIR__ . '/settings.local.php';
 # }
+$databases['default']['default'] = array (
+  'database' => 'drupal',
+  'username' => 'homestead',
+  'password' => 'secret',
+  'prefix' => '',
+  'host' => 'localhost',
+  'port' => '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
+);
+$settings['install_profile'] = 'standard';
+$config_directories['active'] = 'sites/default/files/config_oC8TjUMWf7h0q2czH8btuc9BRzrMA-qCpWhNDdiigb_ALU3MxJG5zl6UndF7PT1QqXOcys3how/active';
+$config_directories['staging'] = 'sites/default/files/config_oC8TjUMWf7h0q2czH8btuc9BRzrMA-qCpWhNDdiigb_ALU3MxJG5zl6UndF7PT1QqXOcys3how/staging';
+
+$settings['couchdb'] = array(
+  'dbname' => 'couchdb',
+  'type' => 'socket',
+  'host' => 'timmillwood.iriscouch.com',
+  'port' => 5984,
+  'user' => null,
+  'password' => null,
+  'ip' => null,
+  'logging' => 'false',
+);

@@ -25,6 +25,7 @@ use Drupal\Core\PageCache\RequestPolicyInterface;
 use Drupal\Core\PhpStorage\PhpStorageFactory;
 use Drupal\Core\Site\Settings;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\ClassLoader\ClassMapGenerator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -170,6 +171,13 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
    * @var array
    */
   protected $serviceProviders;
+
+  /**
+   * Temporary storage for the generated classmap.
+   *
+   * @var array
+   */
+  protected $classMap;
 
   /**
    * Whether the PHP environment has been initialized.
@@ -779,6 +787,11 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
       // If the load succeeded or the class already existed, use it.
       if (class_exists($fully_qualified_class_name, FALSE)) {
         $container = new $fully_qualified_class_name;
+
+        // Load a class map from the container storage.
+        if ($container->getParameter('container.use_classmap')) {
+          $this->classMap = $this->loadClassMap();
+        }
       }
     }
 
@@ -814,9 +827,20 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
 
     // If needs dumping flag was set, dump the container.
     $base_class = Settings::get('container_base_class', '\Drupal\Core\DependencyInjection\Container');
-    if ($this->containerNeedsDumping && !$this->dumpDrupalContainer($this->container, $base_class)) {
-      $this->container->get('logger.factory')->get('DrupalKernel')->notice('Container cannot be written to disk');
+    if ($this->containerNeedsDumping) {
+      if ($this->dumpDrupalContainer($this->container, $base_class)) {
+        if ($this->container->getParameter('container.use_classmap')) {
+          // Dump the classMap, too.
+          $this->dumpClassMap();
+        }
+      }
+      else {
+        $this->container->get('logger.factory')->get('DrupalKernel')->notice('Container cannot be written to disk');
+      }
     }
+
+    // Free the class map memory.
+    $this->classMap = [];
 
     return $this->container;
   }
@@ -1055,6 +1079,11 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
     // from the container.
     $this->classLoaderAddMultiplePsr4($container->getParameter('container.namespaces'));
 
+    // Optimize class loading by optionally using a classmap.
+    if (!empty($this->classMap)) {
+      $this->classLoader->addClassMap($this->classMap);
+    }
+
     $container->set('kernel', $this);
 
     // Set the class loader which was registered as a synthetic service.
@@ -1080,8 +1109,11 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
     $container->set('kernel', $this);
     $container->setParameter('container.modules', $this->getModulesParameter());
 
+    // Get the list of all module file names.
+    $module_file_names = $this->getModuleFileNames();
+
     // Get a list of namespaces and put it onto the container.
-    $namespaces = $this->getModuleNamespacesPsr4($this->getModuleFileNames());
+    $namespaces = $this->getModuleNamespacesPsr4($module_file_names);
     // Add all components in \Drupal\Core and \Drupal\Component that have one of
     // the following directories:
     // - Element
@@ -1103,6 +1135,19 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
       }
     }
     $container->setParameter('container.namespaces', $namespaces);
+
+    // Enable modules to add classmap files.
+    $container->setParameter('container.classmap_files', []);
+
+    // When this is FALSE, no classmap is loaded or dumped.
+    $container->setParameter('container.use_classmap', FALSE);
+
+    // Optionally generate a class map.
+    $this->classMap = [];
+    if (Settings::get('classloader_dump_modules_classmap', FALSE)) {
+      $this->classMap = $this->getModuleClassMap($module_file_names);
+      $container->setParameter('container.use_classmap', TRUE);
+    }
 
     // Store the default language values on the container. This is so that the
     // default language can be configured using the configuration factory. This
@@ -1155,6 +1200,10 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
     $container->setParameter('persist_ids', $persist_ids);
 
     $container->compile();
+
+    // Merge the container classmap files with the auto-detected ones.
+    $this->classMap = array_merge($this->classMap, $this->getClassMaps($container->getParameter('container.classmap_files')));
+
     return $container;
   }
 
@@ -1215,6 +1264,68 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
     return $this->storage()->save($class . '.php', $content);
   }
 
+  /**
+   * Loads a classmap from PhpStorage.
+   *
+   * @return array
+   *   The loaded classmap or empty array.
+   */
+  protected function loadClassMap() {
+    $classmap = [];
+    $cid = 'class_map_' . $this->getClassName() . '.php';
+
+    if ($file = $this->storage()->getFullPath($cid)) {
+      $classmap = @include $file;
+    }
+
+    return $classmap;
+  }
+
+  /**
+   * Dumps a classmap to PhpStorage.
+   *
+   * @return bool
+   *  TRUE on success, FALSE otherwise.
+   */
+  protected function dumpClassMap() {
+    if (empty($this->classMap)) {
+      return TRUE;
+    }
+
+    $cid = 'class_map_' . $this->getClassName() . '.php';
+    $classmap_string = var_export($this->classMap, TRUE);
+
+    // Compress the classmap - if size is around 1 MB and supported.
+    if (strlen($classmap_string) > 1040000 && function_exists('gzdeflate')) {
+      $data = base64_encode(gzdeflate(serialize($this->classMap)));
+      $classmap_string = "unserialize(gzinflate(base64_decode('$data')))";
+    }
+
+    $content =<<<EOF
+<?php return $classmap_string;
+EOF;
+
+    return $this->storage()->save($cid, $content);
+  }
+
+  /**
+   * Returns a class map loaded from files.
+   *
+   * @param array $files
+   *   The files to load the classmaps from. These need to be executable PHP
+   *   files, which return their content as a classmap array.
+   *
+   * @return array
+   *   The combined classmap of the loaded files.
+   */
+  protected function getClassMaps(array $files) {
+    $classmap = [];
+    foreach ($files as $file) {
+      $classmap = array_merge($classmap, include $file);
+    }
+
+    return $classmap;
+  }
 
   /**
    * Gets a http kernel from the container
@@ -1309,6 +1420,24 @@ class DrupalKernel implements DrupalKernelInterface, TerminableInterface {
       $namespaces["Drupal\\$module"] = dirname($filename) . '/src';
     }
     return $namespaces;
+  }
+
+   /**
+   * Returns a class map for all enabled modules.
+   *
+   * @return array
+   *   A class map array.
+   */
+  protected function getModuleClassMap($module_file_names) {
+    $classmap = [];
+    foreach ($module_file_names as $module => $filename) {
+      $module_src = $this->root . '/' . dirname($filename) . '/src';
+      if (file_exists($module_src)) {
+        $classmap = array_merge($classmap, ClassMapGenerator::createMap($module_src));
+      }
+    }
+
+    return $classmap;
   }
 
   /**
