@@ -37,6 +37,9 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
    * Tests the update path for the Statistics module.
    */
   public function testUpdate() {
+    // Set schema version to 0 for statistics module so all update hooks run.
+    drupal_set_installed_schema_version('statistics', '8000');
+
     // Make sure the node module was enabled in the first place.
     $this->assertTrue(\Drupal::moduleHandler()->moduleExists('node'), 'Node module is enabled');
 

@@ -59,7 +59,7 @@ function statistics_schema() {
 }
 
 /**
- * Implements hook_update_N().
+ * Disable the Statistics module if the node module is not enabled.
  */
 function statistics_update_8001() {
   if (!\Drupal::moduleHandler()->moduleExists('node')) {
