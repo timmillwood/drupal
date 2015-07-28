@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\block\Tests\Update\BlockContextMappingUpdateTest.
+ * Contains \Drupal\statistics\Tests\StatisticsUpdateTest.
  */
 
 namespace Drupal\statistics\Tests;
@@ -21,7 +21,7 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['statistics'];
+  protected static $modules = ['node', 'statistics'];
 
   /**
    * {@inheritdoc}
@@ -33,17 +33,20 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
     parent::setUp();
   }
 
+  /**
+   * Tests the update path for the Statistics module.
+   */
   public function testUpdate() {
     // Make sure the node module was enabled in the first place.
     $this->assertTrue(\Drupal::moduleHandler()->moduleExists('node'), 'Node module is enabled');
-    
+
     // Make sure the test setup enabled the statistics module.
     $this->assertTrue(\Drupal::moduleHandler()->moduleExists('statistics'), 'Statistics module is enabled');
-    
+
     // Uninstall the node module.
     \Drupal::service('module_installer')->uninstall(array('node'), FALSE);
-    
-    // Make sure the node module was in face disabled.
+
+    // Make sure the node module was in fact disabled.
     $this->assertFalse(\Drupal::moduleHandler()->moduleExists('node'), 'Node module is disabled');
 
     // Run the update hooks.
