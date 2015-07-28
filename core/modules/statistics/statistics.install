@@ -63,7 +63,7 @@ function statistics_schema() {
  */
 function statistics_update_8001() {
   if (!\Drupal::moduleHandler()->moduleExists('node')) {
-      \Drupal::service('module_installer')->uninstall(array('statistics'), TRUE);
-      drupal_set_message('The statistics module depends on the node module and has therefore been uninstalled.','status');
+    \Drupal::service('module_installer')->uninstall(array('statistics'), TRUE);
+    drupal_set_message('The statistics module depends on the node module and has therefore been uninstalled.', 'status');
   }
 }
