@@ -34,9 +34,9 @@ return array(
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Goutte\\' => array($vendorDir . '/fabpot/goutte/Goutte'),
-    'Drupal\\Driver\\' => array($baseDir . '/../drivers/lib/Drupal/Driver'),
-    'Drupal\\Core\\' => array($baseDir . '/lib/Drupal/Core'),
-    'Drupal\\Component\\' => array($baseDir . '/lib/Drupal/Component'),
+    'Drupal\\Driver\\' => array($baseDir . '/../drivers/src/Drupal/Driver'),
+    'Drupal\\Core\\' => array($baseDir . '/src/Drupal/Core'),
+    'Drupal\\Component\\' => array($baseDir . '/src/Drupal/Component'),
     'Behat\\Mink\\Driver\\' => array($vendorDir . '/behat/mink-goutte-driver/src'),
     'Behat\\Mink\\' => array($vendorDir . '/behat/mink/src'),
 );

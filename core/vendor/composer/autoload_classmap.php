@@ -6,12 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Drupal\\Component\\Utility\\Timer' => $baseDir . '/lib/Drupal/Component/Utility/Timer.php',
-    'Drupal\\Component\\Utility\\Unicode' => $baseDir . '/lib/Drupal/Component/Utility/Unicode.php',
-    'Drupal\\Core\\Database\\Database' => $baseDir . '/lib/Drupal/Core/Database/Database.php',
-    'Drupal\\Core\\DrupalKernel' => $baseDir . '/lib/Drupal/Core/DrupalKernel.php',
-    'Drupal\\Core\\DrupalKernelInterface' => $baseDir . '/lib/Drupal/Core/DrupalKernelInterface.php',
-    'Drupal\\Core\\Site\\Settings' => $baseDir . '/lib/Drupal/Core/Site/Settings.php',
+    'Drupal\\Component\\Utility\\Timer' => $baseDir . '/src/Drupal/Component/Utility/Timer.php',
+    'Drupal\\Component\\Utility\\Unicode' => $baseDir . '/src/Drupal/Component/Utility/Unicode.php',
+    'Drupal\\Core\\Database\\Database' => $baseDir . '/src/Drupal/Core/Database/Database.php',
+    'Drupal\\Core\\DrupalKernel' => $baseDir . '/src/Drupal/Core/DrupalKernel.php',
+    'Drupal\\Core\\DrupalKernelInterface' => $baseDir . '/src/Drupal/Core/DrupalKernelInterface.php',
+    'Drupal\\Core\\Site\\Settings' => $baseDir . '/src/Drupal/Core/Site/Settings.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/src/Factory.php',

@@ -125,20 +125,20 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "Drupal\\Core\\": "lib/Drupal/Core",
-      "Drupal\\Component\\": "lib/Drupal/Component",
-      "Drupal\\Driver\\": "../drivers/lib/Drupal/Driver"
+      "Drupal\\Core\\": "src/Drupal/Core",
+      "Drupal\\Component\\": "src/Drupal/Component",
+      "Drupal\\Driver\\": "../drivers/src/Drupal/Driver"
     },
     "files": [
-      "lib/Drupal.php"
+      "src/Drupal.php"
     ],
     "classmap": [
-      "lib/Drupal/Component/Utility/Timer.php",
-      "lib/Drupal/Component/Utility/Unicode.php",
-      "lib/Drupal/Core/Database/Database.php",
-      "lib/Drupal/Core/DrupalKernel.php",
-      "lib/Drupal/Core/DrupalKernelInterface.php",
-      "lib/Drupal/Core/Site/Settings.php"
+      "src/Drupal/Component/Utility/Timer.php",
+      "src/Drupal/Component/Utility/Unicode.php",
+      "src/Drupal/Core/Database/Database.php",
+      "src/Drupal/Core/DrupalKernel.php",
+      "src/Drupal/Core/DrupalKernelInterface.php",
+      "src/Drupal/Core/Site/Settings.php"
     ]
   },
   "config": {
