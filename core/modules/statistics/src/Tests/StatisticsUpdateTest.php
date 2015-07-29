@@ -62,6 +62,7 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
 
     // Run the update hooks.
     $this->runUpdates();
+    //statistics_update_8001();
 
     // Check the Schema version.
     $schema_version = drupal_get_installed_schema_version('statistics');
