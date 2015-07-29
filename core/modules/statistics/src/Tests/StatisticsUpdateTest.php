@@ -37,8 +37,16 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
    * Tests the update path for the Statistics module.
    */
   public function testUpdate() {
+    // Check the Schema version.
+    $schema_version = drupal_get_installed_schema_version('statistics');
+    $this->assertEqual($schema_version, '8001', 'Schema version is 8001');
+
     // Set schema version to 0 for statistics module so all update hooks run.
     drupal_set_installed_schema_version('statistics', '8000');
+
+    // Check the Schema version.
+    $schema_version = drupal_get_installed_schema_version('statistics');
+    $this->assertEqual($schema_version, '8000', 'Schema version is 8000');
 
     // Make sure the node module was enabled in the first place.
     $this->assertTrue(\Drupal::moduleHandler()->moduleExists('node'), 'Node module is enabled');
@@ -52,10 +60,17 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
     // Make sure the node module was in fact disabled.
     $this->assertFalse(\Drupal::moduleHandler()->moduleExists('node'), 'Node module is disabled');
 
+    $this->error(\Drupal::moduleHandler()->moduleExists('statistics'));
+
     // Run the update hooks.
     $this->runUpdates();
 
+    // Check the Schema version.
+    $schema_version = drupal_get_installed_schema_version('statistics');
+    $this->assertEqual($schema_version, '8001', 'Schema version is 8001');
+
     // Make sure the statistics module was disabled by the update hook.
+    $this->error(\Drupal::moduleHandler()->moduleExists('statistics'));
     $this->assertFalse(\Drupal::moduleHandler()->moduleExists('statistics'), 'Statistics module is disabled');
   }
 }
