@@ -60,8 +60,6 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
     // Make sure the node module was in fact disabled.
     $this->assertFalse(\Drupal::moduleHandler()->moduleExists('node'), 'Node module is disabled');
 
-    $this->error(\Drupal::moduleHandler()->moduleExists('statistics'));
-
     // Run the update hooks.
     $this->runUpdates();
 
@@ -70,7 +68,6 @@ class StatisticsUpdateTest extends UpdatePathTestBase {
     $this->assertEqual($schema_version, '8001', 'Schema version is 8001');
 
     // Make sure the statistics module was disabled by the update hook.
-    $this->error(\Drupal::moduleHandler()->moduleExists('statistics'));
     $this->assertFalse(\Drupal::moduleHandler()->moduleExists('statistics'), 'Statistics module is disabled');
   }
 }
