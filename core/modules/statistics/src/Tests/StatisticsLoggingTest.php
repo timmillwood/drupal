@@ -102,7 +102,7 @@ class StatisticsLoggingTest extends WebTestBase {
     $stats_path = base_path() . $module_path . '/statistics.php';
     $lib_path = base_path() . $module_path . '/statistics.js';
     $expected_library = '/<script src=".*?' . preg_quote($lib_path, '/.') . '.*?">/is';
-    
+
     // Verify that logging scripts are not found on a non-node page.
     $this->drupalGet('node');
     $settings = $this->getDrupalSettings();
