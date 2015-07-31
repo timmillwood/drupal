@@ -97,10 +97,9 @@ class StatisticsLoggingTest extends WebTestBase {
    * Verifies node hit counter logging and script placement.
    */
   function testLogging() {
-    global $base_url;
     $path = 'node/' . $this->node->id();
     $module_path = drupal_get_path('module', 'statistics');
-    $stats_path = $base_url . '/' . $module_path . '/statistics.php';
+    $stats_path = base_path() . $module_path . '/statistics.php';
     $lib_path = base_path() . $module_path . '/statistics.js';
     $expected_library = '/<script src=".*?' . preg_quote($lib_path, '/.') . '.*?">/is';
     
@@ -131,7 +130,7 @@ class StatisticsLoggingTest extends WebTestBase {
     // Manually call statistics.php to simulate ajax data collection behavior.
     global $base_root;
     $post = array('nid' => $this->node->id());
-    $this->client->post($stats_path, array('form_params' => $post));
+    $this->client->post($base_root . $stats_path, array('form_params' => $post));
     $node_counter = statistics_get($this->node->id());
     $this->assertIdentical($node_counter['totalcount'], '1');
   }
