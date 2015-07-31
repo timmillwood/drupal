@@ -7,7 +7,6 @@
 
 namespace Drupal\statistics\Tests;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\simpletest\WebTestBase;
 
 /**
