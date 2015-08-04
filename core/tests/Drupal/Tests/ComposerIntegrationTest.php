@@ -60,11 +60,17 @@ class ComposerIntegrationTest extends UnitTestCase {
    */
   public function testComposerJson() {
     foreach ($this->getPaths() as $path) {
-      $json = file_get_contents($path . '/composer.json');
+      $file = $path . '/composer.json';
+      if (file_exists($file)) {
+        $json = file_get_contents($path . '/composer.json');
 
-      $result = json_decode($json);
-      if (is_null($result)) {
-        $this->fail($this->getErrorMessages()[json_last_error()]);
+        $result = json_decode($json);
+        if (is_null($result)) {
+          $this->fail($this->getErrorMessages()[json_last_error()]);
+        }
+      }
+      elseif ($file != $this->root . '/composer.json') {
+        $this->fail("File $file not found.");
       }
     }
   }
