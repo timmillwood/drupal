@@ -42,6 +42,7 @@ use Drupal\comment\CommentTypeInterface;
  *     "id",
  *     "label",
  *     "target_entity_type_id",
+ *     "revision",
  *     "description",
  *   }
  * )
@@ -77,6 +78,13 @@ class CommentType extends ConfigEntityBundleBase implements CommentTypeInterface
   protected $target_entity_type_id;
 
   /**
+   * The default revision setting for the comment type.
+   *
+   * @var bool
+   */
+  protected $revision;
+
+  /**
    * {@inheritdoc}
    */
   public function getDescription() {
@@ -96,6 +104,13 @@ class CommentType extends ConfigEntityBundleBase implements CommentTypeInterface
    */
   public function getTargetEntityTypeId() {
     return $this->target_entity_type_id;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function shouldCreateNewRevision() {
+    return $this->revision;
   }
 
 }

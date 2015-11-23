@@ -145,6 +145,13 @@ class CommentTypeForm extends EntityForm {
       $form['#submit'][] = 'language_configuration_element_submit';
     }
 
+    $form['revision'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Create new revision'),
+        '#default_value' => $comment_type->shouldCreateNewRevision(),
+        '#description' => t('Create a new revision by default for this comment type.'),
+    );
+
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
