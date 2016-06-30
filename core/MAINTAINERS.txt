@@ -306,6 +306,10 @@ Contact module
 - Jibran Ijaz 'jibran' https://www.drupal.org/u/jibran
 - Andrey Postnikov 'andypost' https://www.drupal.org/u/andypost
 
+Content Moderation module
+- Tim Millwood 'timmillwood' https://www.drupal.org/u/timmillwood
+- Lee Rowlands 'larowlan' https://www.drupal.org/u/larowlan
+
 Content Translation module
 - Francesco Placella 'plach' https://www.drupal.org/u/plach
 
